@@ -4,7 +4,6 @@ namespace Encore\Admin\Grid;
 
 use Encore\Admin\Grid;
 use Encore\Admin\Middleware\Pjax;
-use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -21,7 +20,7 @@ class Model
     /**
      * Eloquent model instance of the grid model.
      *
-     * @var EloquentModel
+     * @var  \Moloquent
      */
     protected $model;
 
@@ -97,25 +96,25 @@ class Model
     /**
      * Create a new grid model instance.
      *
-     * @param EloquentModel $model
+     * @param  \Moloquent $model
      */
-    public function __construct(EloquentModel $model)
+    public function __construct(\Moloquent $model)
     {
         $this->model = $model;
 
         $this->queries = collect();
 
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
     }
 
     /**
      * Don't snake case attributes.
      *
-     * @param EloquentModel $model
+     * @param  \Moloquent $model
      *
      * @return void
      */
-    protected static function doNotSnakeAttributes(EloquentModel $model)
+    protected static function doNotSnakeAttributes(\Moloquent $model)
     {
         $class = get_class($model);
 
@@ -125,7 +124,7 @@ class Model
     /**
      * Get the eloquent model of the grid model.
      *
-     * @return EloquentModel
+     * @return  \Moloquent
      */
     public function eloquent()
     {
@@ -431,12 +430,12 @@ class Model
     {
         if ($perPage = app('request')->input($this->perPageName)) {
             if (is_array($paginate)) {
-                $paginate['arguments'][0] = (int) $perPage;
+                $paginate['arguments'][0] = (int)$perPage;
 
                 return $paginate['arguments'];
             }
 
-            $this->perPage = (int) $perPage;
+            $this->perPage = (int)$perPage;
         }
 
         if (isset($paginate['arguments'][0])) {
@@ -518,7 +517,7 @@ class Model
             $this->queries->push([
                 'method'    => 'orderBy',
                 'arguments' => [
-                    $relation->getRelated()->getTable().'.'.$relationColumn,
+                    $relation->getRelated()->getTable() . '.' . $relationColumn,
                     $this->sort['type'],
                 ],
             ]);
@@ -557,7 +556,7 @@ class Model
                 $relatedTable,
                 $relation->getForeignKey(),
                 '=',
-                $relatedTable.'.'.$relation->getRelated()->getKeyName(),
+                $relatedTable . '.' . $relation->getRelated()->getKeyName(),
             ];
         }
 
@@ -622,7 +621,7 @@ class Model
             $this->eagerLoads[] = $relations;
         }
 
-        return $this->__call('with', (array) $relations);
+        return $this->__call('with', (array)$relations);
     }
 
     /**

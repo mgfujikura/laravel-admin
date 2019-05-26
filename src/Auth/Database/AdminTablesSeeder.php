@@ -72,48 +72,49 @@ class AdminTablesSeeder extends Seeder
         Menu::truncate();
         Menu::insert([
             [
+                '_id' => '1',
                 'parent_id' => 0,
                 'order'     => 1,
                 'title'     => 'Index',
                 'icon'      => 'fa-bar-chart',
                 'uri'       => '/',
-            ],
-            [
+            ], [
+                '_id' => '2',
                 'parent_id' => 0,
                 'order'     => 2,
                 'title'     => 'Admin',
                 'icon'      => 'fa-tasks',
                 'uri'       => '',
-            ],
-            [
+            ], [
+                '_id' => '3',
                 'parent_id' => 2,
                 'order'     => 3,
                 'title'     => 'Users',
                 'icon'      => 'fa-users',
                 'uri'       => 'auth/users',
-            ],
-            [
+            ], [
+                '_id' => '4',
                 'parent_id' => 2,
                 'order'     => 4,
                 'title'     => 'Roles',
                 'icon'      => 'fa-user',
                 'uri'       => 'auth/roles',
-            ],
-            [
+            ], [
+                '_id' => '5',
                 'parent_id' => 2,
                 'order'     => 5,
                 'title'     => 'Permission',
                 'icon'      => 'fa-ban',
                 'uri'       => 'auth/permissions',
-            ],
-            [
+            ], [
+                '_id' => '6',
                 'parent_id' => 2,
                 'order'     => 6,
                 'title'     => 'Menu',
                 'icon'      => 'fa-bars',
                 'uri'       => 'auth/menu',
-            ],
-            [
+            ], [
+                '_id' => '7',
                 'parent_id' => 2,
                 'order'     => 7,
                 'title'     => 'Operation log',
@@ -123,6 +124,6 @@ class AdminTablesSeeder extends Seeder
         ]);
 
         // add role to menu.
-        Menu::find(2)->roles()->save(Role::first());
+        Menu::find('2')->roles()->save(Role::first());
     }
 }

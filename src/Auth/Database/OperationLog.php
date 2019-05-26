@@ -2,10 +2,9 @@
 
 namespace Encore\Admin\Auth\Database;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OperationLog extends Model
+class OperationLog extends \Moloquent
 {
     protected $fillable = ['user_id', 'path', 'method', 'ip', 'input'];
 
@@ -42,7 +41,7 @@ class OperationLog extends Model
      *
      * @return BelongsTo
      */
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Administrator::class);
     }
