@@ -1,8 +1,13 @@
 {
-    "name": "encore/laravel-admin",
+    "name": "mgfujikura/laravel-admin",
     "description": "laravel admin",
     "type": "library",
-    "keywords": ["laravel", "admin", "grid", "form"],
+    "keywords": [
+        "laravel",
+        "admin",
+        "grid",
+        "form"
+    ],
     "homepage": "https://github.com/z-song/laravel-admin",
     "license": "MIT",
     "authors": [
@@ -57,7 +62,6 @@
             "aliases": {
                 "Admin": "Encore\\Admin\\Facades\\Admin"
             }
-
         }
     }
 }
