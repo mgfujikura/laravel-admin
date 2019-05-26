@@ -12,7 +12,6 @@ use Encore\Admin\Grid\HasElementNames;
 use Encore\Admin\Grid\Model;
 use Encore\Admin\Grid\Row;
 use Encore\Admin\Grid\Tools;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
@@ -163,10 +162,10 @@ class Grid
     /**
      * Create a new grid instance.
      *
-     * @param Eloquent $model
+     * @param \Moloquent $model
      * @param Closure  $builder
      */
-    public function __construct(Eloquent $model, Closure $builder = null)
+    public function __construct(\Moloquent $model, Closure $builder = null)
     {
         $this->keyName = $model->getKeyName();
         $this->model = new Model($model);
@@ -265,7 +264,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName).'.'.$relationColumn;
+            $name = snake_case($relationName) . '.' . $relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -667,7 +666,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource().'?'.http_build_query($input);
+        return $this->resource() . '?' . http_build_query($input);
     }
 
     /**
@@ -683,9 +682,10 @@ class Grid
             $queryString = http_build_query($constraints);
         }
 
-        return sprintf('%s/create%s',
+        return sprintf(
+            '%s/create%s',
             $this->resource(),
-            $queryString ? ('?'.$queryString) : ''
+            $queryString ? ('?' . $queryString) : ''
         );
     }
 
@@ -858,7 +858,8 @@ class Grid
             return $this->addColumn($method, $label)->setRelation(snake_case($method));
         }
 
-        if ($relation instanceof Relations\HasMany
+        if (
+            $relation instanceof Relations\HasMany
             || $relation instanceof Relations\BelongsToMany
             || $relation instanceof Relations\MorphToMany
         ) {
