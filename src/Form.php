@@ -331,17 +331,15 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
-            $inserts = $this->prepareInsert($this->updates);
+        $inserts = $this->prepareInsert($this->updates);
 
-            foreach ($inserts as $column => $value) {
-                $this->model->setAttribute($column, $value);
-            }
+        foreach ($inserts as $column => $value) {
+            $this->model->setAttribute($column, $value);
+        }
 
-            $this->model->save();
+        $this->model->save();
 
-            $this->updateRelation($this->relations);
-        });
+        $this->updateRelation($this->relations);
 
         if (($response = $this->callSaved()) instanceof Response) {
             return $response;
@@ -522,18 +520,16 @@ class Form implements Renderable
             return $response;
         }
 
-        DB::transaction(function () {
-            $updates = $this->prepareUpdate($this->updates);
+        $updates = $this->prepareUpdate($this->updates);
 
-            foreach ($updates as $column => $value) {
-                /* @var Model $this->model */
-                $this->model->setAttribute($column, $value);
-            }
+        foreach ($updates as $column => $value) {
+            /* @var Model $this->model */
+            $this->model->setAttribute($column, $value);
+        }
 
-            $this->model->save();
+        $this->model->save();
 
-            $this->updateRelation($this->relations);
-        });
+        $this->updateRelation($this->relations);
 
         if (($result = $this->callSaved()) instanceof Response) {
             return $result;
@@ -586,10 +582,10 @@ class Form implements Renderable
     {
         if (request('after-save') == 1) {
             // continue editing
-            $url = rtrim($resourcesPath, '/')."/{$key}/edit";
+            $url = rtrim($resourcesPath, '/') . "/{$key}/edit";
         } elseif (request('after-save') == 2) {
             // view resource
-            $url = rtrim($resourcesPath, '/')."/{$key}";
+            $url = rtrim($resourcesPath, '/') . "/{$key}";
         } else {
             $url = request(Builder::PREVIOUS_URL_KEY) ?: $resourcesPath;
         }
@@ -809,9 +805,9 @@ class Form implements Renderable
      */
     protected function invalidColumn($columns, $oneToOneRelation = false)
     {
-        foreach ((array) $columns as $column) {
-            if ((!$oneToOneRelation && Str::contains($column, '.')) ||
-                ($oneToOneRelation && !Str::contains($column, '.'))) {
+        foreach ((array)$columns as $column) {
+            if ((!$oneToOneRelation && Str::contains($column, '.')) || ($oneToOneRelation && !Str::contains($column, '.'))
+            ) {
                 return true;
             }
         }
@@ -917,7 +913,7 @@ class Form implements Renderable
      */
     public function ignore($fields)
     {
-        $this->ignored = array_merge($this->ignored, (array) $fields);
+        $this->ignored = array_merge($this->ignored, (array)$fields);
 
         return $this;
     }
@@ -974,7 +970,7 @@ class Form implements Renderable
      */
     protected function setFieldOriginalValue()
     {
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $values = $this->model->toArray();
 
@@ -996,7 +992,7 @@ class Form implements Renderable
 
         $this->model = $this->model->with($relations)->findOrFail($id);
 
-//        static::doNotSnakeAttributes($this->model);
+        //        static::doNotSnakeAttributes($this->model);
 
         $data = $this->model->toArray();
 
@@ -1084,12 +1080,14 @@ class Form implements Renderable
             if (str_contains($column, '.')) {
                 list($relation) = explode('.', $column);
 
-                if (method_exists($this->model, $relation) &&
+                if (
+                    method_exists($this->model, $relation) &&
                     $this->model->$relation() instanceof Relations\Relation
                 ) {
                     $relations[] = $relation;
                 }
-            } elseif (method_exists($this->model, $column) &&
+            } elseif (
+                method_exists($this->model, $column) &&
                 !method_exists(Model::class, $column)
             ) {
                 $relations[] = $column;
