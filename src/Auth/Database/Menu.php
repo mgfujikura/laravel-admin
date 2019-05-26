@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @method where($parent_id, $id)
  */
-class Menu extends Moloquent
+class Menu extends \Moloquent
 {
     use AdminBuilder, ModelTree {
     ModelTree::boot as treeBoot;
