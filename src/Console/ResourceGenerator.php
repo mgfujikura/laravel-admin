@@ -3,6 +3,8 @@
 namespace Encore\Admin\Console;
 
 use Illuminate\Database\Eloquent\Model;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Types\Type;
 
 class ResourceGenerator
 {
@@ -213,7 +215,13 @@ class ResourceGenerator
      */
     protected function getTableColumns()
     {
-        $fields = $this->model::getFields();
+        if (method_exists($this->model, 'getFields')) {
+            $fields = $this->model::getFields();
+        } else {
+            $fields = [
+                '_id' => 'string',
+            ];
+        }
         $columns = [];
         foreach ($fields as $name => $type) {
             $columns[] = new Column($name, Type::getType($type));
