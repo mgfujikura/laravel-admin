@@ -143,7 +143,7 @@ trait ModelTree
      *
      * @return array
      */
-    protected function buildNestedArray(array $nodes = [], $parentId = 0)
+    protected function buildNestedArray(array $nodes = [], $parentId = '0')
     {
         $branch = [];
 
@@ -174,7 +174,7 @@ trait ModelTree
     public function allNodes()
     {
         $orderColumn = DB::getQueryGrammar()->wrap($this->orderColumn);
-        $byOrder = $orderColumn.' = 0,'.$orderColumn;
+        $byOrder = $orderColumn . ' = 0,' . $orderColumn;
 
         $self = new static();
 
@@ -207,14 +207,14 @@ trait ModelTree
      * @param array $tree
      * @param int   $parentId
      */
-    public static function saveOrder($tree = [], $parentId = 0)
+    public static function saveOrder($tree = [], $parentId = '0')
     {
         if (empty(static::$branchOrder)) {
             static::setBranchOrder($tree);
         }
 
         foreach ($tree as $branch) {
-            $node = static::find($branch['id']);
+            $node = static::find((string)$branch['id']);
 
             $node->{$node->getParentColumn()} = $parentId;
             $node->{$node->getOrderColumn()} = static::$branchOrder[$branch['id']];
@@ -235,7 +235,7 @@ trait ModelTree
     {
         $options = (new static())->buildSelectOptions();
 
-        return collect($options)->prepend('Root', 0)->all();
+        return collect($options)->prepend('Root', '0')->all();
     }
 
     /**
@@ -247,7 +247,7 @@ trait ModelTree
      *
      * @return array
      */
-    protected function buildSelectOptions(array $nodes = [], $parentId = 0, $prefix = '')
+    protected function buildSelectOptions(array $nodes = [], $parentId = '0', $prefix = '')
     {
         $prefix = $prefix ?: str_repeat('&nbsp;', 6);
 
@@ -258,9 +258,9 @@ trait ModelTree
         }
 
         foreach ($nodes as $node) {
-            $node[$this->titleColumn] = $prefix.'&nbsp;'.$node[$this->titleColumn];
+            $node[$this->titleColumn] = $prefix . '&nbsp;' . $node[$this->titleColumn];
             if ($node[$this->parentColumn] == $parentId) {
-                $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix.$prefix);
+                $children = $this->buildSelectOptions($nodes, $node[$this->getKeyName()], $prefix . $prefix);
 
                 $options[$node[$this->getKeyName()]] = $node[$this->titleColumn];
 
