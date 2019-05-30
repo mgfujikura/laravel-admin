@@ -41,6 +41,7 @@ class MenuController extends Controller
                     $form->text('uri', trans('admin.uri'));
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
                     $form->hidden('_token')->default(csrf_token());
+                    $form->hidden('order')->default('0');
 
 
                     $form->saving(function (Form $form) {
