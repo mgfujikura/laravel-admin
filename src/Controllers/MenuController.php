@@ -42,6 +42,10 @@ class MenuController extends Controller
                     $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
                     $form->hidden('_token')->default(csrf_token());
 
+
+                    $form->saving(function (Form $form) {
+                        $form->order = (int)$form->order;
+                    });
                     $column->append((new Box(trans('admin.new'), $form))->style('success'));
                 });
             });
@@ -120,6 +124,12 @@ class MenuController extends Controller
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
+        $form->hidden('order')->default('0');
+
+        $form->saving(function (Form $form) {
+            $form->order = (int)$form->order;
+        });
+        return $form;
 
         return $form;
     }
