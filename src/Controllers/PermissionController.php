@@ -85,7 +85,7 @@ class PermissionController extends Controller
     {
         $grid = new Grid(new Permission());
 
-        $grid->id('ID')->sortable();
+        $grid->_id('ID')->sortable();
         $grid->slug(trans('admin.slug'));
         $grid->name(trans('admin.name'));
 
@@ -104,7 +104,7 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
 
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                $path = '/' . trim(config('admin.route.prefix'), '/') . $path;
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
@@ -133,7 +133,7 @@ class PermissionController extends Controller
     {
         $show = new Show(Permission::findOrFail($id));
 
-        $show->id('ID');
+        $show->_id('ID');
         $show->slug(trans('admin.slug'));
         $show->name(trans('admin.name'));
 
@@ -152,7 +152,7 @@ class PermissionController extends Controller
                     return "<span class='label label-primary'>{$name}</span>";
                 })->implode('&nbsp;');
 
-                $path = '/'.trim(config('admin.route.prefix'), '/').$path;
+                $path = '/' . trim(config('admin.route.prefix'), '/') . $path;
 
                 return "<div style='margin-bottom: 5px;'>$method<code>$path</code></div>";
             })->implode('');
@@ -173,7 +173,7 @@ class PermissionController extends Controller
     {
         $form = new Form(new Permission());
 
-        $form->display('id', 'ID');
+        $form->display('_id', 'ID');
 
         $form->text('slug', trans('admin.slug'))->rules('required');
         $form->text('name', trans('admin.name'))->rules('required');

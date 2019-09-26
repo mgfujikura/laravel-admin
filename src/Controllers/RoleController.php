@@ -85,7 +85,7 @@ class RoleController extends Controller
     {
         $grid = new Grid(new Role());
 
-        $grid->id('ID')->sortable();
+        $grid->_id('ID')->sortable();
         $grid->slug(trans('admin.slug'));
         $grid->name(trans('admin.name'));
 
@@ -120,7 +120,7 @@ class RoleController extends Controller
     {
         $show = new Show(Role::findOrFail($id));
 
-        $show->id('ID');
+        $show->_id('ID');
         $show->slug(trans('admin.slug'));
         $show->name(trans('admin.name'));
         $show->permissions(trans('admin.permissions'))->as(function ($permission) {
@@ -141,11 +141,11 @@ class RoleController extends Controller
     {
         $form = new Form(new Role());
 
-        $form->display('id', 'ID');
+        $form->display('_id', 'ID');
 
         $form->text('slug', trans('admin.slug'))->rules('required');
         $form->text('name', trans('admin.name'))->rules('required');
-        $form->listbox('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', 'id'));
+        $form->listbox('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', '_id'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));

@@ -81,7 +81,7 @@ class UserController extends Controller
     {
         $grid = new Grid(new Administrator());
 
-        $grid->id('ID')->sortable();
+        $grid->_id('ID')->sortable();
         $grid->username(trans('admin.username'));
         $grid->name(trans('admin.name'));
         $grid->roles(trans('admin.roles'))->pluck('name')->label();
@@ -114,7 +114,7 @@ class UserController extends Controller
     {
         $show = new Show(Administrator::findOrFail($id));
 
-        $show->id('ID');
+        $show->_id('ID');
         $show->username(trans('admin.username'));
         $show->name(trans('admin.name'));
         $show->roles(trans('admin.roles'))->as(function ($roles) {
@@ -138,7 +138,7 @@ class UserController extends Controller
     {
         $form = new Form(new Administrator());
 
-        $form->display('id', 'ID');
+        $form->display('_id', 'ID');
 
         $form->text('username', trans('admin.username'))->rules('required');
         $form->text('name', trans('admin.name'))->rules('required');
@@ -151,8 +151,8 @@ class UserController extends Controller
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', 'id'));
+        $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', '_id'));
+        $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', '_id'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
