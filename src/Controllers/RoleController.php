@@ -89,7 +89,9 @@ class RoleController extends Controller
         $grid->slug(trans('admin.slug'));
         $grid->name(trans('admin.name'));
 
-        $grid->permissions(trans('admin.permission'))->pluck('name')->label();
+        $grid->permissions(trans('admin.permission'))->display(function () {
+            return $this->permissions()->pluck('name');
+        });
 
         $grid->created_at(trans('admin.created_at'));
         $grid->updated_at(trans('admin.updated_at'));
@@ -149,6 +151,21 @@ class RoleController extends Controller
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
+
+        $form->saving(function (Form $form) {
+            $permissions = array_values(array_filter($form->permissions, function ($value) {
+                return !empty($value);
+            }));
+            $form->model()->permissions()->sync($permissions);
+        });
+        $form->saved(function (Form $form) {
+            $model = $form->model();
+            if (isset($model->permission_id)) {
+                Permission::whereIn('_id', $model->permission_id)->get()->each(function ($permission) use ($form) {
+                    $permission->roles()->attach($form->model()->_id);
+                });
+            }
+        });
 
         return $form;
     }
