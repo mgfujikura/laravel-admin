@@ -84,7 +84,9 @@ class UserController extends Controller
         $grid->_id('ID')->sortable();
         $grid->username(trans('admin.username'));
         $grid->name(trans('admin.name'));
-        $grid->roles(trans('admin.roles'))->pluck('name')->label();
+        $grid->roles(trans('admin.roles'))->display(function () {
+            return $this->roles()->pluck('name');
+        });
         $grid->created_at(trans('admin.created_at'));
         $grid->updated_at(trans('admin.updated_at'));
 
@@ -161,6 +163,8 @@ class UserController extends Controller
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = bcrypt($form->password);
             }
+            $form->model()->roles()->sync($form->roles);
+            $form->model()->permissions()->sync($form->permissions);
         });
 
         return $form;
