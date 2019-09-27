@@ -122,9 +122,6 @@ class UserController extends Controller
         $show->roles(trans('admin.roles'))->as(function ($roles) {
             return $roles->pluck('name');
         })->label();
-        $show->permissions(trans('admin.permissions'))->as(function ($permission) {
-            return $permission->pluck('name');
-        })->label();
         $show->created_at(trans('admin.created_at'));
         $show->updated_at(trans('admin.updated_at'));
 
@@ -154,7 +151,6 @@ class UserController extends Controller
         $form->ignore(['password_confirmation']);
 
         $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', '_id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', '_id'));
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
@@ -163,8 +159,21 @@ class UserController extends Controller
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = bcrypt($form->password);
             }
-            $form->model()->roles()->sync($form->roles);
-            $form->model()->permissions()->sync($form->permissions);
+            $roles = array_values(array_filter($form->roles, function ($value) {
+                return !empty($value);
+            }));
+            $form->model()->roles()->sync($roles);
+        });
+        $form->saved(function (Form $form) {
+            $model = $form->model();
+            if (isset($model->role_id)) {
+                foreach ($model->role_id as $roleId) {
+                    $role = Role::find($roleId)->first();
+                    if ($role) {
+                        $role->administrators()->attach($form->model()->_id);
+                    }
+                }
+            }
         });
 
         return $form;
