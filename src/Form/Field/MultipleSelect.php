@@ -26,8 +26,8 @@ class MultipleSelect extends Select
             return $this->otherKey;
         }
 
-        if (is_callable([$this->form->model(), $this->column]) &&
-            ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
+        if (
+            is_callable([$this->form->model(), $this->column]) && ($relation = $this->form->model()->{$this->column}()) instanceof BelongsToMany
         ) {
             /* @var BelongsToMany $relation */
             $fullKey = $relation->getQualifiedRelatedPivotKeyName();
@@ -54,7 +54,8 @@ class MultipleSelect extends Select
                 $this->value = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->value[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    // $this->value[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    $this->value[] = array_get($relation, "_id");
                 }
             }
         }
@@ -75,7 +76,8 @@ class MultipleSelect extends Select
                 $this->original = $relations;
             } else {
                 foreach ($relations as $relation) {
-                    $this->original[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    // $this->original[] = array_get($relation, "pivot.{$this->getOtherKey()}");
+                    $this->original[] = array_get($relation, "_id");
                 }
             }
         }
